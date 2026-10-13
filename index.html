@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a2259">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Camarón 3D">
+<meta name="description" content="Visor de camarones en 3D con acceso sin conexión después de instalar y descargar los modelos.">
+<title>Visor 3D del camarón · PWA V12</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<link rel="stylesheet" href="./styles.css">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js"></script>
+<script src="./app.js" defer></script>
+</head>
+<body>
+<header class="appHeader">
+ <div><h1>Visor 3D del camarón</h1><p>Evaluación visual de condiciones y defectos.</p></div>
+ <span class="headerStatus" id="headerStatus">Conexión sin verificar</span>
+</header>
+<main class="layout">
+ <section class="card viewerCard" aria-label="Visor tridimensional">
+  <div class="viewerWrap">
+   <div class="overlay left">Desliza para girar · pellizca para ampliar</div>
+   <div class="overlay right" id="modelLabel">Camarón sano</div>
+   <div id="loading" aria-live="polite">Preparando visor 3D…</div>
+   <model-viewer id="viewer" camera-controls interaction-prompt="auto" touch-action="pan-y"
+    loading="eager" exposure="0.72" environment-image="neutral" shadow-intensity="0.10" shadow-softness="0.75"
+    tone-mapping="neutral" field-of-view="24deg" camera-orbit="0deg 75deg 115%"
+    min-camera-orbit="auto 0deg 35%" max-camera-orbit="auto 180deg 260%"
+    auto-rotate-delay="0" rotation-per-second="14deg" alt="Modelo tridimensional del camarón seleccionado"></model-viewer>
+  </div>
+  <div class="controlStrip">
+   <div class="sectionLabel">Vistas y controles</div>
+   <div class="controls">
+    <button type="button" class="ctrl primary" id="autoBtn">↻ Girar solo</button>
+    <button type="button" class="ctrl" id="resetBtn">⟲ Restablecer</button>
+    <button type="button" class="ctrl" data-orbit="0deg 75deg 115%">Lado A</button>
+    <button type="button" class="ctrl" data-orbit="180deg 75deg 115%">Lado B</button>
+    <button type="button" class="ctrl" data-orbit="0deg 18deg 110%">Dorsal</button>
+    <button type="button" class="ctrl" data-orbit="0deg 160deg 110%">Ventral</button>
+   </div>
+  </div>
+ </section>
+ <section class="card conditionsCard" aria-labelledby="conditionsTitle">
+  <h2 id="conditionsTitle">Seleccionar condición</h2>
+  <div class="condList">
+   <button type="button" class="cond active" data-key="sano" aria-pressed="true"><span class="t">Sano</span><span class="s">Sin anomalías visibles</span></button>
+   <button type="button" class="cond" data-key="bol" aria-pressed="false"><span class="t">BOL</span><span class="s">Branquias oscuras leves</span></button>
+   <button type="button" class="cond" data-key="bof" aria-pressed="false"><span class="t">BOF</span><span class="s">Branquias oscuras fuertes</span></button>
+   <button type="button" class="cond" data-key="mbl" aria-pressed="false"><span class="t">Mancha bucal leve</span><span class="s">Mancha discreta y localizada</span></button>
+   <button type="button" class="cond" data-key="mbf" aria-pressed="false"><span class="t">Mancha bucal fuerte</span><span class="s">Mancha intensa y extendida</span></button>
+   <button type="button" class="cond" disabled><span class="t">Picado leve</span><span class="s">Pendiente de modelo</span></button>
+   <button type="button" class="cond" disabled><span class="t">Picado fuerte</span><span class="s">Pendiente de modelo</span></button>
+  </div>
+ </section>
+ <aside class="card infoPanel">
+  <span class="sectionLabel">Descripción de la condición</span>
+  <h2 id="infoName">Camarón sano</h2>
+  <p id="description">Individuo que se observa completamente sin anomalías visibles, con una coloración natural y homogénea, exoesqueleto íntegro y estructura corporal conservada. No presenta alteraciones evidentes en branquias, boca, abdomen, cola ni apéndices.</p>
+  <div class="featureBox"><strong id="featureTitle">Características visuales esperadas</strong><p id="featureText">Coloración natural grisácea a translúcida, superficie uniforme, segmentos definidos, apéndices íntegros y ausencia de manchas oscuras, lesiones, picado o signos visibles de muda.</p></div>
+  <span class="status" id="statusText">Modelo base activo</span>
+ </aside>
+ <section class="card offlinePanel" aria-labelledby="offlineTitle">
+  <div class="offlineTitleRow"><div><span class="sectionLabel">Instalación en iPhone</span><h2 id="offlineTitle">Preparar uso sin Internet</h2></div><span id="offlineBadge" class="offlineBadge">Pendiente</span></div>
+  <p class="offlineIntro">Con Internet, descarga una sola vez los cinco modelos y el motor del visor. Después podrás abrir la aplicación desde la pantalla de inicio sin conexión, mientras iOS conserve el almacenamiento.</p>
+  <div class="offlineProgress" id="progressArea" hidden><div class="progressTrack"><div id="progressBar" class="progressBar"></div></div><p id="progressText" aria-live="polite">Preparando descarga…</p></div>
+  <button type="button" id="downloadOffline" class="downloadBtn">↓ Guardar modelos para usar sin Internet</button>
+  <p class="offlineMessage" id="offlineMessage" aria-live="polite">Publica esta carpeta en HTTPS y ábrela en Safari para instalarla.</p>
+  <details class="instructions"><summary>¿Cómo instalar en iPhone?</summary><ol><li>Abre el enlace HTTPS de esta aplicación en Safari.</li><li>Pulsa <b>Compartir → Agregar a Inicio</b> y activa <b>Abrir como app</b> cuando aparezca.</li><li>Desde la aplicación instalada y con Wi-Fi, pulsa <b>Guardar modelos para usar sin Internet</b>.</li><li>Espera a que aparezca <b>Disponible sin conexión</b>; luego activa el modo avión y prueba los cinco modelos.</li></ol></details>
+  <small class="storageNote">Los modelos originales ocupan aproximadamente 269 MB sin comprimir. iOS podría borrar sus copias almacenadas si necesita espacio; en ese caso vuelve a descargarlos con Internet.</small>
+ </section>
+</main>
+<footer>Visor 3D del camarón · PWA iPhone · Modelos originales de alta resolución</footer>
+</body>
+</html>
