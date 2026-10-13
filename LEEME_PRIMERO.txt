@@ -1,0 +1,21 @@
+VISOR CAMARÓN PWA V12 — SUBIDA DESDE NAVEGADOR, SIN GITHUB DESKTOP
+
+IMPORTANTE: TODOS LOS ARCHIVOS de esta carpeta van en la RAÍZ del repositorio de GitHub. No hay subcarpetas.
+
+1. En https://github.com/new crea un repositorio PÚBLICO llamado visor-camaron.
+2. En el repositorio abre Add file -> Upload files.
+3. Arrastra los ARCHIVOS que hay dentro de esta carpeta al cuadro de carga (NO el ZIP).
+   Puedes seleccionarlos todos con Ctrl + A. Espera a que terminen de subir.
+4. Abajo escribe un mensaje como 'Publicar visor PWA' y pulsa Commit changes.
+5. Ve a Settings -> Pages -> Deploy from a branch -> main -> /(root) -> Save.
+6. Espera a que aparezca la URL https://TUUSUARIO.github.io/visor-camaron/
+7. En iPhone abre la URL con Safari -> Compartir -> Agregar a Inicio.
+8. Abre la PWA instalada, conecta Wi-Fi y pulsa 'Guardar modelos para usar sin Internet'.
+9. Espera la confirmación, activa modo avión y comprueba los cinco modelos.
+
+Los GLB ORIGINALES se dividieron en fragmentos de 16 MiB máximo; se reconstituyen
+en memoria solo al abrir cada condición. Geometría y texturas son idénticas.
+Los modelos requieren ~269 MB de almacenamiento, más la memoria de renderizado.
+Si iOS elimina datos almacenados, necesitarás volver a guardar los modelos.
+El repositorio PUBLICO deja sus archivos accesibles en Internet.
+No publique material confidencial o privado sin autorización.
