@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Camarón 3D">
 <meta name="description" content="Visor de camarones en 3D con acceso sin conexión después de instalar y descargar los modelos.">
-<title>Visor 3D del camarón · PWA V12</title>
+<title>Visor 3D del camarón · PWA V14</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" href="./icon-192.png" type="image/png">
@@ -46,16 +46,36 @@
   </div>
  </section>
  <section class="card conditionsCard" aria-labelledby="conditionsTitle">
+  <span class="sectionLabel">Evaluación por defecto</span>
   <h2 id="conditionsTitle">Seleccionar condición</h2>
-  <div class="condList">
-   <button type="button" class="cond active" data-key="sano" aria-pressed="true"><span class="t">Sano</span><span class="s">Sin anomalías visibles</span></button>
-   <button type="button" class="cond" data-key="bol" aria-pressed="false"><span class="t">BOL</span><span class="s">Branquias oscuras leves</span></button>
-   <button type="button" class="cond" data-key="bof" aria-pressed="false"><span class="t">BOF</span><span class="s">Branquias oscuras fuertes</span></button>
-   <button type="button" class="cond" data-key="mbl" aria-pressed="false"><span class="t">Mancha bucal leve</span><span class="s">Mancha discreta y localizada</span></button>
-   <button type="button" class="cond" data-key="mbf" aria-pressed="false"><span class="t">Mancha bucal fuerte</span><span class="s">Mancha intensa y extendida</span></button>
-   <button type="button" class="cond" disabled><span class="t">Picado leve</span><span class="s">Pendiente de modelo</span></button>
-   <button type="button" class="cond" disabled><span class="t">Picado fuerte</span><span class="s">Pendiente de modelo</span></button>
+  <p class="conditionsHint">Elige primero el defecto y luego su nivel. El camarón 3D se actualizará arriba.</p>
+  <div class="defectGroups">
+   <section class="defectGroup" aria-labelledby="titleBranquias">
+    <div class="groupHeader"><h3 id="titleBranquias">Branquias Oscuras</h3><p>Coloración de la estructura branquial</p></div>
+    <div class="severityGrid" role="group" aria-label="Severidad de Branquias Oscuras">
+     <button type="button" class="severityBtn severityHealthy active" data-group="branquias" data-key="sano" aria-pressed="true">Sano</button>
+     <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol" aria-pressed="false">Leve</button>
+     <button type="button" class="severityBtn severityStrong" data-group="branquias" data-key="bof" aria-pressed="false">Fuerte</button>
+    </div>
+   </section>
+   <section class="defectGroup" aria-labelledby="titleBucal">
+    <div class="groupHeader"><h3 id="titleBucal">Mancha Bucal</h3><p>Pigmentación en la región bucal</p></div>
+    <div class="severityGrid" role="group" aria-label="Severidad de Mancha Bucal">
+     <button type="button" class="severityBtn severityHealthy" data-group="bucal" data-key="mbs" aria-pressed="false">Sano</button>
+     <button type="button" class="severityBtn severityMild" data-group="bucal" data-key="mbl" aria-pressed="false">Leve</button>
+     <button type="button" class="severityBtn severityStrong" data-group="bucal" data-key="mbf" aria-pressed="false">Fuerte</button>
+    </div>
+   </section>
+   <section class="defectGroup" aria-labelledby="titlePicado">
+    <div class="groupHeader"><h3 id="titlePicado">Picado</h3><p>Alteraciones visibles en el exoesqueleto</p></div>
+    <div class="severityGrid" role="group" aria-label="Severidad de Picado">
+     <button type="button" class="severityBtn severityHealthy" data-group="picado" data-key="sano" aria-pressed="false">Sano</button>
+     <button type="button" class="severityBtn severityMild" data-group="picado" disabled>Leve<span class="btnNote">Pendiente</span></button>
+     <button type="button" class="severityBtn severityStrong" data-group="picado" disabled>Fuerte<span class="btnNote">Pendiente</span></button>
+    </div>
+   </section>
   </div>
+  <p class="conditionsFootnote">Los modelos de Picado leve y fuerte se activarán cuando se integren sus GLB.</p>
  </section>
  <aside class="card infoPanel">
   <span class="sectionLabel">Descripción de la condición</span>
@@ -66,12 +86,12 @@
  </aside>
  <section class="card offlinePanel" aria-labelledby="offlineTitle">
   <div class="offlineTitleRow"><div><span class="sectionLabel">Instalación en iPhone</span><h2 id="offlineTitle">Preparar uso sin Internet</h2></div><span id="offlineBadge" class="offlineBadge">Pendiente</span></div>
-  <p class="offlineIntro">Con Internet, descarga una sola vez los cinco modelos y el motor del visor. Después podrás abrir la aplicación desde la pantalla de inicio sin conexión, mientras iOS conserve el almacenamiento.</p>
+  <p class="offlineIntro">Con Internet, guarda los modelos disponibles y el motor del visor. Después podrás abrir la aplicación desde la pantalla de inicio sin conexión, mientras iOS conserve el almacenamiento.</p>
   <div class="offlineProgress" id="progressArea" hidden><div class="progressTrack"><div id="progressBar" class="progressBar"></div></div><p id="progressText" aria-live="polite">Preparando descarga…</p></div>
   <button type="button" id="downloadOffline" class="downloadBtn">↓ Guardar modelos para usar sin Internet</button>
   <p class="offlineMessage" id="offlineMessage" aria-live="polite">Publica esta carpeta en HTTPS y ábrela en Safari para instalarla.</p>
-  <details class="instructions"><summary>¿Cómo instalar en iPhone?</summary><ol><li>Abre el enlace HTTPS de esta aplicación en Safari.</li><li>Pulsa <b>Compartir → Agregar a Inicio</b> y activa <b>Abrir como app</b> cuando aparezca.</li><li>Desde la aplicación instalada y con Wi-Fi, pulsa <b>Guardar modelos para usar sin Internet</b>.</li><li>Espera a que aparezca <b>Disponible sin conexión</b>; luego activa el modo avión y prueba los cinco modelos.</li></ol></details>
-  <small class="storageNote">Los modelos originales ocupan aproximadamente 269 MB sin comprimir. iOS podría borrar sus copias almacenadas si necesita espacio; en ese caso vuelve a descargarlos con Internet.</small>
+  <details class="instructions"><summary>¿Cómo instalar en iPhone?</summary><ol><li>Abre el enlace HTTPS de esta aplicación en Safari.</li><li>Pulsa <b>Compartir → Agregar a Inicio</b> y activa <b>Abrir como app</b> cuando aparezca.</li><li>Desde la aplicación instalada y con Wi-Fi, pulsa <b>Guardar modelos para usar sin Internet</b>.</li><li>Espera a que aparezca <b>Disponible sin conexión</b>; luego activa el modo avión y prueba los seis modelos.</li></ol></details>
+  <small class="storageNote">Los seis modelos originales ocupan aproximadamente 327 MB sin comprimir. iOS podría borrar sus copias almacenadas si necesita espacio; en ese caso vuelve a descargarlos con Internet.</small>
  </section>
 </main>
 <footer>Visor 3D del camarón · PWA iPhone · Modelos originales de alta resolución</footer>

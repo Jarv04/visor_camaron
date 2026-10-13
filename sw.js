@@ -1,6 +1,7 @@
-/* Visor Camarón PWA V12. Recursos guardados bajo la misma versión que app.js. */
+/* Visor Camarón PWA V14. Recursos guardados bajo la misma versión que app.js. */
 'use strict';
-const CACHE_NAME='visor-camaron-offline-v12';
+const CACHE_NAME='visor-camaron-shell-v14';
+const MODEL_CACHE='visor-camaron-offline-v12';
 const SHELL=['./','./index.html','./app.js','./styles.css','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event=>{
  event.waitUntil((async()=>{const cache=await caches.open(CACHE_NAME);await cache.addAll(SHELL);await self.skipWaiting();})());
@@ -8,7 +9,7 @@ self.addEventListener('install', event=>{
 self.addEventListener('activate', event=>{
  event.waitUntil((async()=>{
   const keys=await caches.keys();
-  await Promise.all(keys.filter(k=>k.startsWith('visor-camaron-offline-')&&k!==CACHE_NAME).map(k=>caches.delete(k)));
+  await Promise.all(keys.filter(k=>k.startsWith('visor-camaron-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)));
   await self.clients.claim();
  })());
 });
@@ -23,6 +24,9 @@ self.addEventListener('fetch',event=>{
   const cache=await caches.open(CACHE_NAME);
   const match=await cache.match(req,{ignoreSearch:true});
   if(match)return match;
+  const previous=await caches.open(MODEL_CACHE);
+  const existing=await previous.match(req,{ignoreSearch:true});
+  if(existing)return existing;
   try{
    const response=await fetch(req);
    // Engine can be cached automatically after a first controlled load.
