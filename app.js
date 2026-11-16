@@ -6,6 +6,9 @@ const meta={"sano":{"badge":"Sano","label":"Camarón sano","desc":"Individuo que
 const $=id=>document.getElementById(id);
 const viewer=$('viewer'), loading=$('loading');
 let selected='sano', selectedGroup='branquias', auto=false, preparing=false, loadingSeq=0, currentBlobUrl=null;
+// Proporción del modelo sano: ?ancho=1.3 en la URL permite probar valores (1 a 2). Por defecto, proporción original.
+const ANCHO_SANO=(()=>{const v=parseFloat(new URLSearchParams(location.search).get('ancho'));return v>=1&&v<=2?v:1})();
+const scaleFor=key=>key==='sano'?`${ANCHO_SANO} ${(1+(ANCHO_SANO-1)*0.2).toFixed(3)} 1`:'1 1 1';
 const partUrl=path=>new URL(path,location.href).href;
 const allPartUrls=()=>Object.values(MODEL_PARTS).flat().map(partUrl);
 
@@ -29,6 +32,7 @@ async function loadModel(key,seq){
  const url=URL.createObjectURL(blob);
  const previous=currentBlobUrl;
  currentBlobUrl=url;
+ viewer.scale=scaleFor(key);
  viewer.src=url;
  setOrbit('0deg 75deg 115%');
  // El modelo anterior se libera cuando el nuevo terminó de cargar.
@@ -80,7 +84,7 @@ async function setCondition(key,group="branquias"){
  }
 
 }
-viewer.addEventListener('load',()=>{loading.classList.add('hidden');ajustarMateriales()});
+viewer.addEventListener('load',()=>{loading.classList.add('hidden');if(viewer.updateFraming)viewer.updateFraming();ajustarMateriales()});
 viewer.addEventListener('error',()=>{failLoading(navigator.onLine?'No fue posible renderizar este modelo 3D. Revisa tu conexión y la memoria disponible.':'El modelo no está disponible sin conexión. Comprueba que esté descargado.');});
 document.querySelectorAll('.severityBtn[data-key]:not([disabled])').forEach(b=>b.addEventListener('click',()=>setCondition(b.dataset.key,b.dataset.group)));
 document.querySelectorAll('[data-orbit]').forEach(b=>b.addEventListener('click',()=>setOrbit(b.dataset.orbit)));
