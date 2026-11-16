@@ -1,7 +1,7 @@
 "use strict";
 const VENDOR_URL='https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js';
 const CACHE_NAME='visor-camaron-offline-v12';
-const MODEL_PARTS={"sano":["./camaron_sano_01.bin","./camaron_sano_02.bin"],"bol":["./camaron_bol_01.bin","./camaron_bol_02.bin","./camaron_bol_03.bin","./camaron_bol_04.bin"],"bof":["./camaron_bof_01.bin","./camaron_bof_02.bin","./camaron_bof_03.bin","./camaron_bof_04.bin"],"mbl":["./camaron_mbl_01.bin","./camaron_mbl_02.bin","./camaron_mbl_03.bin","./camaron_mbl_04.bin"],"mbf":["./camaron_mbf_01.bin","./camaron_mbf_02.bin","./camaron_mbf_03.bin","./camaron_mbf_04.bin"],"mbs":["./camaron_mbs_01.bin","./camaron_mbs_02.bin","./camaron_mbs_03.bin","./camaron_mbs_04.bin"]};
+const MODEL_PARTS={"sano":["./camaron_sano_v2_01.bin","./camaron_sano_v2_02.bin","./camaron_sano_v2_03.bin","./camaron_sano_v2_04.bin"],"bol":["./camaron_bol_01.bin","./camaron_bol_02.bin","./camaron_bol_03.bin","./camaron_bol_04.bin"],"bof":["./camaron_bof_01.bin","./camaron_bof_02.bin","./camaron_bof_03.bin","./camaron_bof_04.bin"],"mbl":["./camaron_mbl_01.bin","./camaron_mbl_02.bin","./camaron_mbl_03.bin","./camaron_mbl_04.bin"],"mbf":["./camaron_mbf_01.bin","./camaron_mbf_02.bin","./camaron_mbf_03.bin","./camaron_mbf_04.bin"],"mbs":["./camaron_mbs_01.bin","./camaron_mbs_02.bin","./camaron_mbs_03.bin","./camaron_mbs_04.bin"]};
 const meta={"sano":{"badge":"Sano","label":"Camarón sano","desc":"Individuo que se observa completamente sin anomalías visibles, con una coloración natural y homogénea, exoesqueleto íntegro y estructura corporal conservada. No presenta alteraciones evidentes en branquias, boca, abdomen, cola ni apéndices.","featureTitle":"Características visuales esperadas","feature":"Coloración natural grisácea a translúcida, superficie uniforme, segmentos definidos, apéndices íntegros y ausencia de manchas oscuras, lesiones, picado o signos visibles de muda.","status":"Modelo base activo"},"bol":{"badge":"BOL","label":"Camarón con branquias oscuras leves","desc":"Individuo con oscurecimiento leve de la estructura branquial. La alteración se aprecia de forma interna y localizada en la zona branquial, manteniendo la coloración natural del resto del camarón.","featureTitle":"Qué revisar en BOL","feature":"Oscurecimiento leve, difuso y localizado en las branquias. El cambio debe observarse dentro de la caja branquial y no como una mancha externa del caparazón.","status":"Modelo BOL activo"},"bof":{"badge":"BOF","label":"Camarón con branquias oscuras fuertes","desc":"Individuo con oscurecimiento marcado de la estructura branquial. La alteración es más intensa y extensa que en BOL, manteniendo sin cambios la coloración natural del resto del camarón.","featureTitle":"Qué revisar en BOF","feature":"Oscurecimiento fuerte, evidente y de mayor extensión en la estructura branquial, sin confundirlo con pigmentación externa del caparazón ni con el hepatopáncreas.","status":"Modelo BOF activo"},"mbl":{"badge":"Mancha bucal leve","label":"Camarón con mancha bucal leve","desc":"Individuo que presenta una mancha de tonalidad marrón oscura, leve y localizada en la región bucal, con menor intensidad y extensión que en la condición fuerte.","featureTitle":"Qué revisar en mancha bucal leve","feature":"Oscurecimiento discreto y concentrado en la región bucal; observar la intensidad y el área de la mancha sin confundirla con pigmentación de otras estructuras.","status":"Modelo de mancha bucal leve activo"},"mbf":{"badge":"Mancha bucal fuerte","label":"Camarón con mancha bucal fuerte","desc":"Individuo que presenta una mancha oscura de mayor intensidad y extensión en la región bucal en comparación con el grado leve.","featureTitle":"Qué revisar en mancha bucal fuerte","feature":"Oscurecimiento marcado y más extendido en la región bucal; distinguirlo de la pigmentación de branquias u otras zonas del cefalotórax.","status":"Modelo de mancha bucal fuerte activo"},"mbs":{"badge":"Mancha bucal sana","label":"Camarón sano · Mancha Bucal","desc":"Ejemplar de referencia sin mancha bucal evidente. Se utiliza para comparar visualmente la región bucal con las condiciones leve y fuerte.","featureTitle":"Qué revisar en mancha bucal sana","feature":"Ausencia de oscurecimiento anormal localizado en la región bucal. Compara esta zona con las muestras de mancha bucal leve y fuerte.","status":"Modelo sano de mancha bucal activo"}};
 const $=id=>document.getElementById(id);
 const viewer=$('viewer'), loading=$('loading');
@@ -10,7 +10,7 @@ const partUrl=path=>new URL(path,location.href).href;
 const allPartUrls=()=>Object.values(MODEL_PARTS).flat().map(partUrl);
 
 // Reconstrucción exacta de un GLB en memoria, solo cuando se selecciona.
-// Los 18 fragmentos no alteran la geometría, las texturas ni la resolución.
+// Los 20 fragmentos no alteran la geometría, las texturas ni la resolución.
 async function fetchPart(path){
  const url=partUrl(path), cache=await caches.open(CACHE_NAME);
  let response=await cache.match(url);
@@ -93,6 +93,12 @@ function setProgress(done,total,text){
  $('progressBar').style.width=`${Math.round(100*done/total)}%`;
  $('progressText').textContent=text;
 }
+// Borra del almacenamiento las partes de modelos que ya no forman parte de la app (p. ej., el sano anterior).
+async function pruneOldParts(){
+ try{const c=await caches.open(CACHE_NAME);const keep=new Set([VENDOR_URL,...allPartUrls()]);
+  for(const req of await c.keys()){if(!keep.has(req.url))await c.delete(req);}
+ }catch(e){console.warn('Limpieza de modelos antiguos:',e)}
+}
 async function offlineStatus(){
  if(!('caches' in window)||!('serviceWorker' in navigator)){
   $('offlineBadge').textContent='No compatible';setOfflineMessage('Este navegador no permite almacenar el visor como PWA. Abre el enlace HTTPS en Safari.');return false;
@@ -153,6 +159,7 @@ async function start(){
    navigator.serviceWorker.addEventListener('controllerchange',offlineStatus);
   }catch(err){setOfflineMessage('No se pudo activar el acceso sin conexión: '+err.message);}
  }
+ await pruneOldParts();
  try{await offlineStatus()}catch(e){console.warn(e)};
  try{
   await Promise.race([customElements.whenDefined('model-viewer'),new Promise((_,rej)=>setTimeout(()=>rej(new Error('motor')),30000))]);
