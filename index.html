@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Camarón 3D">
 <meta name="description" content="Visor de camarones en 3D con acceso sin conexión después de instalar y descargar los modelos.">
-<title>Visor 3D del camarón · PWA V19</title>
+<title>Visor 3D del camarón · PWA V20</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" href="./icon-192.png" type="image/png">
@@ -32,6 +32,32 @@
     tone-mapping="neutral" field-of-view="24deg" camera-orbit="0deg 75deg 115%"
     min-camera-orbit="auto 0deg 35%" max-camera-orbit="auto 180deg 260%"
     auto-rotate-delay="0" rotation-per-second="14deg" alt="Modelo tridimensional del camarón seleccionado"></model-viewer>
+   <div id="multiViewerGrid" class="multiViewerGrid" hidden aria-label="Tres ejemplares con branquias oscuras leves">
+    <div class="multiViewerPane">
+     <span class="multiViewerLabel">Ejemplar 1</span>
+     <model-viewer id="viewerBol1" class="multiViewer" camera-controls interaction-prompt="none" touch-action="pan-y"
+      loading="eager" exposure="0.72" environment-image="neutral" shadow-intensity="0.10" shadow-softness="0.75"
+      tone-mapping="neutral" field-of-view="24deg" camera-orbit="0deg 75deg 115%"
+      min-camera-orbit="auto 0deg 35%" max-camera-orbit="auto 180deg 260%"
+      auto-rotate-delay="0" rotation-per-second="14deg" alt="Ejemplar 1 con branquias oscuras leves"></model-viewer>
+    </div>
+    <div class="multiViewerPane">
+     <span class="multiViewerLabel">Ejemplar 2</span>
+     <model-viewer id="viewerBol2" class="multiViewer" camera-controls interaction-prompt="none" touch-action="pan-y"
+      loading="eager" exposure="0.72" environment-image="neutral" shadow-intensity="0.10" shadow-softness="0.75"
+      tone-mapping="neutral" field-of-view="24deg" camera-orbit="0deg 75deg 115%"
+      min-camera-orbit="auto 0deg 35%" max-camera-orbit="auto 180deg 260%"
+      auto-rotate-delay="0" rotation-per-second="14deg" alt="Ejemplar 2 con branquias oscuras leves"></model-viewer>
+    </div>
+    <div class="multiViewerPane">
+     <span class="multiViewerLabel">Ejemplar 3</span>
+     <model-viewer id="viewerBol3" class="multiViewer" camera-controls interaction-prompt="none" touch-action="pan-y"
+      loading="eager" exposure="0.72" environment-image="neutral" shadow-intensity="0.10" shadow-softness="0.75"
+      tone-mapping="neutral" field-of-view="24deg" camera-orbit="0deg 75deg 115%"
+      min-camera-orbit="auto 0deg 35%" max-camera-orbit="auto 180deg 260%"
+      auto-rotate-delay="0" rotation-per-second="14deg" alt="Ejemplar 3 con branquias oscuras leves"></model-viewer>
+    </div>
+   </div>
   </div>
   <div class="controlStrip">
    <div class="sectionLabel">Vistas y controles</div>
@@ -54,14 +80,7 @@
     <div class="groupHeader"><h3 id="titleBranquias">Branquias Oscuras</h3><p>Coloración de la estructura branquial</p></div>
     <div class="severityGrid" role="group" aria-label="Severidad de Branquias Oscuras">
      <button type="button" class="severityBtn severityHealthy active" data-group="branquias" data-key="sano" aria-pressed="true">Sano</button>
-     <div class="mildSplit" role="group" aria-label="Leve: tres ejemplares">
-       <span class="mildSplit__title">Leve</span>
-       <div class="mildSplit__row">
-        <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol1" aria-pressed="false" aria-label="Leve, ejemplar 1">1</button>
-        <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol2" aria-pressed="false" aria-label="Leve, ejemplar 2">2</button>
-        <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol3" aria-pressed="false" aria-label="Leve, ejemplar 3">3</button>
-       </div>
-      </div>
+     <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bolleve" aria-pressed="false">Leve</button>
      <button type="button" class="severityBtn severityStrong" data-group="branquias" data-key="bof" aria-pressed="false">Fuerte</button>
     </div>
    </section>
@@ -97,8 +116,8 @@
   <div class="offlineProgress" id="progressArea" hidden><div class="progressTrack"><div id="progressBar" class="progressBar"></div></div><p id="progressText" aria-live="polite">Preparando descarga…</p></div>
   <button type="button" id="downloadOffline" class="downloadBtn">↓ Guardar modelos para usar sin Internet</button>
   <p class="offlineMessage" id="offlineMessage" aria-live="polite">Publica esta carpeta en HTTPS y ábrela en Safari para instalarla.</p>
-  <details class="instructions"><summary>¿Cómo instalar en iPhone?</summary><ol><li>Abre el enlace HTTPS de esta aplicación en Safari.</li><li>Pulsa <b>Compartir → Agregar a Inicio</b> y activa <b>Abrir como app</b> cuando aparezca.</li><li>Desde la aplicación instalada y con Wi-Fi, pulsa <b>Guardar modelos para usar sin Internet</b>.</li><li>Espera a que aparezca <b>Disponible sin conexión</b>; luego activa el modo avión y prueba los seis modelos.</li></ol></details>
-  <small class="storageNote">Los seis modelos originales ocupan aproximadamente 327 MB sin comprimir. iOS podría borrar sus copias almacenadas si necesita espacio; en ese caso vuelve a descargarlos con Internet.</small>
+  <details class="instructions"><summary>¿Cómo instalar en iPhone?</summary><ol><li>Abre el enlace HTTPS de esta aplicación en Safari.</li><li>Pulsa <b>Compartir → Agregar a Inicio</b> y activa <b>Abrir como app</b> cuando aparezca.</li><li>Desde la aplicación instalada y con Wi-Fi, pulsa <b>Guardar modelos para usar sin Internet</b>.</li><li>Espera a que aparezca <b>Disponible sin conexión</b>; luego activa el modo avión y prueba los modelos disponibles.</li></ol></details>
+  <small class="storageNote">Los modelos 3D de alta resolución ocupan varios cientos de MB. iOS podría borrar sus copias almacenadas si necesita espacio; en ese caso vuelve a descargarlos con Internet.</small>
  </section>
 </main>
 <footer>Visor 3D del camarón · PWA iPhone · Modelos originales de alta resolución</footer>
