@@ -42,3 +42,9 @@ footer{padding:0 16px max(20px,env(safe-area-inset-bottom));font-size:12px;color
 .conditionsFootnote{font-size:11px;color:var(--muted);line-height:1.5;margin:12px 2px 0}
 @media(min-width:1331px){.layout{grid-template-columns:340px minmax(0,1fr) 315px}.conditionsCard{padding:14px}.defectGroup{padding:11px}.severityBtn{font-size:12.5px}}
 @media(max-width:560px){.conditionsCard{padding:13px}.conditionsHint{font-size:12px;margin-bottom:13px}.defectGroups{gap:10px}.defectGroup{padding:12px}.groupHeader h3{font-size:17px}.severityGrid{gap:8px}.severityBtn{min-height:54px;font-size:14px}.btnNote{font-size:9px}}
+
+/* Leve de branquias dividido en tres ejemplares */
+.mildSplit{display:flex;flex-direction:column;gap:3px;min-width:0;padding:4px;border-radius:11px;border:1px solid #f3d998;background:#fff9e8}
+.mildSplit__title{font-size:11px;font-weight:850;color:#895b03;text-align:center;line-height:1.1}
+.mildSplit__row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;flex:1}
+.mildSplit .severityBtn{min-height:30px;border-radius:8px;font-size:13px;padding:0;background:#fff}

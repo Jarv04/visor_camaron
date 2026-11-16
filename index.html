@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Camarón 3D">
 <meta name="description" content="Visor de camarones en 3D con acceso sin conexión después de instalar y descargar los modelos.">
-<title>Visor 3D del camarón · PWA V17</title>
+<title>Visor 3D del camarón · PWA V18</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" href="./icon-192.png" type="image/png">
@@ -54,7 +54,14 @@
     <div class="groupHeader"><h3 id="titleBranquias">Branquias Oscuras</h3><p>Coloración de la estructura branquial</p></div>
     <div class="severityGrid" role="group" aria-label="Severidad de Branquias Oscuras">
      <button type="button" class="severityBtn severityHealthy active" data-group="branquias" data-key="sano" aria-pressed="true">Sano</button>
-     <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol" aria-pressed="false">Leve</button>
+     <div class="mildSplit" role="group" aria-label="Leve: tres ejemplares">
+       <span class="mildSplit__title">Leve</span>
+       <div class="mildSplit__row">
+        <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol1" aria-pressed="false" aria-label="Leve, ejemplar 1">1</button>
+        <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol2" aria-pressed="false" aria-label="Leve, ejemplar 2">2</button>
+        <button type="button" class="severityBtn severityMild" data-group="branquias" data-key="bol3" aria-pressed="false" aria-label="Leve, ejemplar 3">3</button>
+       </div>
+      </div>
      <button type="button" class="severityBtn severityStrong" data-group="branquias" data-key="bof" aria-pressed="false">Fuerte</button>
     </div>
    </section>
