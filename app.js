@@ -166,7 +166,12 @@ async function start(){
  if(location.protocol==='file:')setOfflineMessage('Este archivo no se instala desde Archivos. Publica la carpeta en HTTPS y abre el enlace en Safari.');
  if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
   try{
-   await navigator.serviceWorker.register('./sw.js',{scope:'./'});
+   const hadController=!!navigator.serviceWorker.controller;
+   // Cuando se publica una versión nueva, recarga una sola vez para usarla de inmediato.
+   let reloaded=false;
+   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(hadController&&!reloaded){reloaded=true;location.reload();}});
+   const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});
+   try{await reg.update()}catch(e){}
    navigator.serviceWorker.addEventListener('controllerchange',offlineStatus);
   }catch(err){setOfflineMessage('No se pudo activar el acceso sin conexión: '+err.message);}
  }
