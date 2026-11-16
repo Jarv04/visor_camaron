@@ -1,6 +1,6 @@
-/* Visor Camarón PWA V20. Recursos guardados bajo la misma versión que app.js. */
+/* Visor Camarón PWA V21. Recursos guardados bajo la misma versión que app.js. */
 'use strict';
-const CACHE_NAME='visor-camaron-shell-v20';
+const CACHE_NAME='visor-camaron-shell-v21';
 const MODEL_CACHE='visor-camaron-offline-v12';
 const SHELL=['./','./index.html','./app.js','./styles.css','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event=>{

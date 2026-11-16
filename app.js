@@ -40,11 +40,19 @@ function clearMulti(){
  for(const [,v] of multiViewers)v.removeAttribute('src');
 }
 function showSingle(){
- multiMode=false;multiGrid.hidden=true;viewer.hidden=false;
+ multiMode=false;
+ multiGrid.hidden=true;
+ multiGrid.style.display='none';
+ viewer.hidden=false;
+ viewer.style.display='';
  viewer.closest('.viewerWrap').classList.remove('multiMode');
 }
 function showMulti(){
- multiMode=true;viewer.hidden=true;multiGrid.hidden=false;
+ multiMode=true;
+ viewer.hidden=true;
+ viewer.style.display='none';
+ multiGrid.hidden=false;
+ multiGrid.style.display='grid';
  viewer.closest('.viewerWrap').classList.add('multiMode');
 }
 function waitViewer(target){
