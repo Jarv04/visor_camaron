@@ -42,7 +42,11 @@ async function loadModel(key,seq){
 }
 
 
-function setOrbit(v){viewer.cameraOrbit=v;if(viewer.jumpCameraToGoal)viewer.jumpCameraToGoal();}
+// Al ensanchar el sano, model-viewer aleja la cámara (encuadra la caja más ancha) y el efecto se pierde.
+// Se compensa la distancia para que el largo del camarón ocupe lo mismo en pantalla.
+let radiusFactor=1, lastOrbit='0deg 75deg 115%';
+function compensate(v){return radiusFactor===1?v:String(v).replace(/([\d.]+)%/,(m,n)=>(parseFloat(n)*radiusFactor).toFixed(1)+'%')}
+function setOrbit(v){lastOrbit=v;viewer.cameraOrbit=compensate(v);if(viewer.jumpCameraToGoal)viewer.jumpCameraToGoal();}
 function ajustarMateriales(){
  try{if(!viewer.model||!viewer.model.materials)return;
   for(const mat of viewer.model.materials){const pbr=mat.pbrMetallicRoughness;if(!pbr)continue;
@@ -84,7 +88,10 @@ async function setCondition(key,group="branquias"){
  }
 
 }
-viewer.addEventListener('load',()=>{loading.classList.add('hidden');if(viewer.updateFraming)viewer.updateFraming();ajustarMateriales()});
+viewer.addEventListener('load',()=>{loading.classList.add('hidden');if(viewer.updateFraming)viewer.updateFraming();
+ try{const d=viewer.getDimensions();const sc=String(viewer.scale).split(' ').map(Number);
+  const r1=Math.hypot(d.x,d.y,d.z), r0=Math.hypot(d.x/sc[0],d.y/sc[1],d.z/sc[2]);
+  radiusFactor=(r1>0&&r0>0)?r0/r1:1; setOrbit(lastOrbit);}catch(e){radiusFactor=1};ajustarMateriales()});
 viewer.addEventListener('error',()=>{failLoading(navigator.onLine?'No fue posible renderizar este modelo 3D. Revisa tu conexión y la memoria disponible.':'El modelo no está disponible sin conexión. Comprueba que esté descargado.');});
 document.querySelectorAll('.severityBtn[data-key]:not([disabled])').forEach(b=>b.addEventListener('click',()=>setCondition(b.dataset.key,b.dataset.group)));
 document.querySelectorAll('[data-orbit]').forEach(b=>b.addEventListener('click',()=>setOrbit(b.dataset.orbit)));
